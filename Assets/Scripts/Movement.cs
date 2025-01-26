@@ -11,6 +11,7 @@ public class Movement : MonoBehaviour
 
     private float currentSpeed = 0f;
     private Rigidbody rb;
+    private AudioSource audioSource;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -20,6 +21,8 @@ public class Movement : MonoBehaviour
         {
             rb.useGravity = false; // Disable default gravity
         }
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -37,11 +40,16 @@ public class Movement : MonoBehaviour
         {
             currentSpeed += acceleration * Time.deltaTime;
             currentSpeed = Mathf.Clamp(currentSpeed, 0f, maxSpeed);
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
         }
         else
         {
             currentSpeed -= deceleration * Time.deltaTime;
             currentSpeed = Mathf.Clamp(currentSpeed, 0f, maxSpeed);
+            audioSource.Stop();
         }
 
         transform.Translate(0f, currentSpeed * Time.deltaTime, 0f);
